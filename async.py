@@ -15,8 +15,8 @@ from firebase_functions.firestore_fn import (
     Change,
     DocumentSnapshot,
 )
+from google.cloud.firestore_v1 import FieldFilter
 
-from bus import Bus
 from generator import generate_random_buses
 
 
@@ -75,6 +75,14 @@ async def main():
     def myfunction(event: Event[Change[DocumentSnapshot]]) -> None:
         new_value = event.data.after
         new_value.reference.set({"last_update": datetime.datetime.now()})
+
+    buses_index = (
+        buses.where(filter=FieldFilter("route", "==", b1_ref))
+        .where(filter=FieldFilter("lastLocation", "==", GeoPoint(-21.42917, -45.94722)))
+        .stream()
+    )
+    async for bus in buses_index:
+        print(bus.to_dict())
 
 
 if __name__ == "__main__":
