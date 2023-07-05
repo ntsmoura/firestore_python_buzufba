@@ -12,7 +12,7 @@ $ cp .settings.toml .settings.local.toml
 ```
 Coloque o arquivo json com sua chave privada na mesma pasta do repositório, e insira o nome deste na variável de ambiente "json_name" em "CRED".
 
-Abre um terminal e baixe as dependências com Pipenv após instala-lo:
+Abre um terminal e execute os comandos para instalar as dependências e rodar os scripts.
 
 ```sh
 # Instale o pipenv
