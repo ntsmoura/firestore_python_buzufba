@@ -9,6 +9,13 @@ from dynaconf import Dynaconf
 from google.cloud import firestore
 from google.cloud.firestore import GeoPoint
 
+from firebase_functions.firestore_fn import (
+    on_document_created,
+    Event,
+    Change,
+    DocumentSnapshot,
+)
+
 from bus import Bus
 from generator import generate_random_buses
 
@@ -63,6 +70,11 @@ async def main():
     batch.update(bus3_ref, {"lastUpdated": datetime.datetime.now()})
 
     await batch.commit()
+
+    @on_document_created(document="buses/{busId}")
+    def myfunction(event: Event[Change[DocumentSnapshot]]) -> None:
+        new_value = event.data.after
+        new_value.reference.set({"last_update": datetime.datetime.now()})
 
 
 if __name__ == "__main__":
